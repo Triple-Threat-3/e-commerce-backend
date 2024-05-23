@@ -7,12 +7,13 @@ const MODE: any = process.env.MODE || "development";
 const dbconfig = config[MODE];
 
 const connectSequelize: Sequelize = new Sequelize(
-  dbconfig.database,
-  dbconfig.username,
-  dbconfig.password,
+  dbconfig[`${MODE}`].url,
+
   {
-    dialect: "postgres",
-    dialectOptions: {},
+    dialect: dbconfig[`${MODE}`].dialect,
+    dialectOptions: {
+      createDatabaseIfNotExist: true,
+    },
   }
 );
 

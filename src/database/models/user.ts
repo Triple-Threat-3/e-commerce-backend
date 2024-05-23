@@ -1,42 +1,52 @@
 "use strict";
-import { DataType, Model } from "sequelize-typescript";
+import { Model, DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
 class User extends Model {
-  public userId?: number;
+  public userId?: string;
   public name!: string;
   public email!: string;
   public password!: string;
   public status!: string;
-  public wishlistId!: number;
-  public cartId!: number;
+  public wishlistId?: string;
+  public cartId?: string;
   public role!: string;
+  public profile?: string;
 
   static associate(models: any) {
-    User.hasOne(models.Cart, {
-      foreignKey: "userId",
-      as: "cart",
-    });
     User.hasMany(models.Rating, {
       foreignKey: "userId",
       as: "rating",
     });
-    User.hasMany(models.Wishlist, {
+    User.hasOne(models.Cart, {
       foreignKey: "userId",
-      as: "wislist",
+      as: "cart",
+    });
+    User.hasOne(models.Wishlist, {
+      foreignKey: "userId",
+      as: "wishlist",
     });
   }
 }
 User.init(
   {
-    userId: { type: DataType.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataType.STRING, allowNull: false },
-    email: { type: DataType.STRING, allowNull: false },
-    password: { type: DataType.STRING, allowNull: false },
-    status: { type: DataType.STRING, allowNull: false, defaultValue: "active" },
-    wishlistId: { type: DataType.INTEGER, allowNull: false },
-    cartId: { type: DataType.INTEGER, allowNull: false },
-    role: { type: DataType.STRING, allowNull: false, defaultValue: "buyer" },
+    userId: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    name: { type: DataTypes.STRING, allowNull: false },
+    email: { type: DataTypes.STRING, allowNull: false },
+    password: { type: DataTypes.STRING, allowNull: false },
+    status: { type: DataTypes.STRING, defaultValue: "active" },
+    wishlistId: { type: DataTypes.STRING },
+    cartId: { type: DataTypes.STRING },
+    role: { type: DataTypes.STRING, defaultValue: "buyer" },
+    profile: {
+      type: DataTypes.STRING,
+      defaultValue:
+        "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg",
+    },
   },
   {
     sequelize: connectSequelize,
@@ -45,4 +55,5 @@ User.init(
     timestamps: true,
   }
 );
+
 export default User;

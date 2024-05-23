@@ -1,6 +1,7 @@
 "use strict";
 import { Model, DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
+import { ftruncate } from "fs";
 
 class Product extends Model {
   public productId?: number;

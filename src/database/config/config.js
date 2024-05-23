@@ -1,12 +1,15 @@
-"use strict";
 const dotenv = require("dotenv");
 dotenv.config();
 module.exports = {
   development: {
-    database: "ecommerce",
-    username: "postgres",
-    password: "galaxy",
+    url: process.env.DATABASE_DEVELOPMENT_URL,
     dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: true,
+      },
+    },
   },
   test: {
     url: process.env.DATABASE_TEST_URL,

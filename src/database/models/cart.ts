@@ -1,9 +1,12 @@
 "use strict";
-import { DataType, Model } from "sequelize-typescript";
+import { Model, DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
+
 class Cart extends Model {
+  public cartId?: string;
+  public userId!: string;
   static associate(models: any) {
-    Cart.hasMany(models.cartItem, {
+    Cart.hasMany(models.CartItem, {
       foreignKey: "cartId",
       as: "cartItems",
     });
@@ -11,13 +14,18 @@ class Cart extends Model {
 }
 Cart.init(
   {
-    cartId: { type: DataType.NUMBER, primaryKey: true, autoIncrement: true },
-    userId: { type: DataType.NUMBER, allowNull: false },
+    cartId: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    userId: { type: DataTypes.STRING, allowNull: false },
   },
   {
     sequelize: connectSequelize,
     modelName: "Cart",
     tableName: "Carts",
+    timestamps: true,
   }
 );
 

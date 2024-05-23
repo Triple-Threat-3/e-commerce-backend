@@ -1,15 +1,17 @@
 "use strict";
 import { Model, DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
+import { ftruncate } from "fs";
 
 class Vendor extends Model {
-  public vendorId?: number;
-  public userId!: number;
+  public vendorId?: string;
+  public userId!: string;
   public storeName!: string;
   public address!: any;
   public TIN!: number;
   public bankAccount!: number;
   public paymentDetails!: any;
+  public status!: string;
   static associate(models: any) {
     Vendor.hasMany(models.Product, {
       foreignKey: "vendorId",
@@ -20,16 +22,21 @@ class Vendor extends Model {
 Vendor.init(
   {
     vendorId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      autoIncrement: true,
+      defaultValue: DataTypes.UUIDV4,
     },
-    userId: { type: DataTypes.INTEGER, allowNull: false },
+    userId: { type: DataTypes.STRING, allowNull: false },
     storeName: { type: DataTypes.STRING, allowNull: false },
     address: { type: DataTypes.JSONB, allowNull: false },
     TIN: { type: DataTypes.INTEGER, allowNull: false },
     bankAccount: { type: DataTypes.INTEGER, allowNull: false },
     paymentDetails: { type: DataTypes.JSONB, allowNull: true },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "pending",
+    },
   },
   {
     sequelize: connectSequelize,

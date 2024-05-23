@@ -1,23 +1,22 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class subscription extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
+import { Model,DataTypes } from "sequelize";
+import connectSequelize from "../config/db.config";
+
+  class Subscription  extends Model  {
+    public subscriptionId?: string
+    public email!: string;
+    static associate(models: any) {
     }
   }
-  subscription.init({
-    name: DataTypes.STRING
+  Subscription.init({
+    subscriptionId: {type:DataTypes.STRING,primaryKey: true,defaultValue: DataTypes.UUIDV4},
+    email: {type:DataTypes.STRING,allowNull: false},
+
   }, {
-    sequelize,
-    modelName: 'subscription',
+    sequelize: connectSequelize,
+    modelName: 'Subscription',
+    tableName: 'Subscriptions',
+    timestamps: true
   });
-  return subscription;
-};
+
+  export default Subscription
